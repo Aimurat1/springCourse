@@ -3,10 +3,13 @@ package kz.aimurat_mvc.config;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -19,12 +22,15 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 @Configuration
 @ComponentScan("kz.aimurat_mvc")
 @EnableWebMvc
+@PropertySource("classpath:database.properties")
 public class ApplicationContextMVC implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
+    private final Environment environment;
 
     @Autowired
-    public ApplicationContextMVC(ApplicationContext applicationContext) {
+    public ApplicationContextMVC(ApplicationContext applicationContext, Environment environment) {
         this.applicationContext = applicationContext;
+        this.environment = environment;
     }
 
     @Bean
@@ -54,10 +60,10 @@ public class ApplicationContextMVC implements WebMvcConfigurer {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5433/peopleDB");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("qwerty");
+        dataSource.setDriverClassName(environment.getProperty("driver"));
+        dataSource.setUrl(environment.getProperty("url"));
+        dataSource.setUsername(environment.getProperty("usernameDB"));
+        dataSource.setPassword(environment.getProperty("password"));
 
         return dataSource;
     }

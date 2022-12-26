@@ -45,7 +45,8 @@ public class PersonDAO {
         // return jdbcTemplate.query("SELECT * FROM Person", new PersonMapper());
         // //Custom mapper
 
-        return jdbcTemplate.query("SELECT * FROM Person ORDER BY id ASC", new BeanPropertyRowMapper<>(Person.class));
+        return jdbcTemplate.query("SELECT * FROM Person ORDER BY id ASC",
+                new BeanPropertyRowMapper<>(Person.class));
 
         // OLD Jdbc
         // List<Person> people = new ArrayList<>();
@@ -126,7 +127,8 @@ public class PersonDAO {
     public void add(Person person) {
 
         // Jdbc template
-        jdbcTemplate.update("INSERT INTO person VALUES(1, ?, ?, ?, ?)", person.getName(), person.getSurname(),
+        jdbcTemplate.update("INSERT INTO person VALUES(1, ?, ?, ?, ?)",
+                person.getName(), person.getSurname(),
                 person.getAge(), person.getEmail());
 
         // OLD Jdbc
