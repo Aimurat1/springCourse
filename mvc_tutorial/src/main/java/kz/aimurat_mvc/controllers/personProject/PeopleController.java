@@ -59,6 +59,12 @@ public class PeopleController {
         return "personProject/people/new";
     }
 
+    @GetMapping("/deleteAll")
+    public String deleteAll() {
+        personDAO.deleteAll();
+        return "redirect:/people";
+    }
+
     @PostMapping()
     public String create(@ModelAttribute("person") @Valid Person person,
             BindingResult bindingResult, Model model) {
