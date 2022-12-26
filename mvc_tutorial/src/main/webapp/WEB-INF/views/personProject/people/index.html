@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>People List</title>
+</head>
+<body>
+    <div th:each="person : ${people}">
+        <a th:href="@{/people/{id}(id=${person.getId()})}" th:text="${person.getName()}">user</a>
+        <span th:text="${person.getSurname()}"></span>
+        <span th:text="${person.getAge()}"></span>
+        <span th:text="${person.getEmail()}"></span>
+        <a th:href="@{/people/{id}/edit(id=${person.getId()})}"><button>Edit</button></a>
+        <br>
+    </div>
+    <br>
+    <a th:href="@{/people/new}"><button>Add person</button></a>
+</body>
+</html>

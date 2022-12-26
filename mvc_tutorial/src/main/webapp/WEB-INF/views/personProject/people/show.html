@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>Name: <b><span th:text="${person.getName()}"></span></b></p>
+    <p>Surname: <b><span th:text="${person.getSurname()}"></span></b></p>
+    <p>Age: <b><span th:text="${person.getAge()}"></span></b></p>
+    <p>Email: <b><span th:text="${person.getEmail()}"></span></b></p>
+    <p>ID: <b><span th:text="${person.getId()}"></span></b></p>
+
+    <form th:action="@{/people/{id}(id=${person.getId()})}" th:method="DELETE" th:object="${person}" >
+        <input type="submit" value="Delete person">
+    </form>
+    <br>
+    <a th:href="@{/people}">Back to all list</a>
+
+</body>
+</html>
