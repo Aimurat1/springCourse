@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import kz.aimurat_mvc.models.Person;
@@ -30,75 +33,84 @@ public class PersonDAO {
     // 18));
     // }
 
-    public static final String URL = "jdbc:postgresql://localhost:5433/peopleDB";
-    public static final String USERNAME = "postgres";
-    public static final String PASSWORD = "qwerty";
+    private final JdbcTemplate jdbcTemplate;
 
-    private static Connection connection;
-
-    static {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    @Autowired
+    public PersonDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     public List<Person> index() {
-        List<Person> people = new ArrayList<>();
+        // Jdbc Template
+        // return jdbcTemplate.query("SELECT * FROM Person", new PersonMapper());
+        // //Custom mapper
 
-        try {
-            Statement statement = connection.createStatement();
-            String SQL = "SELECT * FROM person ORDER BY id ASC";
-            ResultSet resultSet = statement.executeQuery(SQL);
+        return jdbcTemplate.query("SELECT * FROM Person ORDER BY id ASC", new BeanPropertyRowMapper<>(Person.class));
 
-            while (resultSet.next()) {
-                Person person = new Person();
+        // OLD Jdbc
+        // List<Person> people = new ArrayList<>();
 
-                person.setId(resultSet.getInt("id"));
-                person.setName(resultSet.getString("name"));
-                person.setSurname(resultSet.getString("surname"));
-                person.setAge(resultSet.getInt("age"));
-                person.setEmail(resultSet.getString("email"));
+        // try {
+        // Statement statement = connection.createStatement();
+        // String SQL = "SELECT * FROM person ORDER BY id ASC";
+        // ResultSet resultSet = statement.executeQuery(SQL);
 
-                people.add(person);
-            }
+        // while (resultSet.next()) {
+        // Person person = new Person();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        // person.setId(resultSet.getInt("id"));
+        // person.setName(resultSet.getString("name"));
+        // person.setSurname(resultSet.getString("surname"));
+        // person.setAge(resultSet.getInt("age"));
+        // person.setEmail(resultSet.getString("email"));
 
-        return people;
+        // people.add(person);
+        // }
+
+        // } catch (SQLException e) {
+        // e.printStackTrace();
+        // }
+
+        // return people;
 
     }
 
     public Person show(int i) {
-        Person person = new Person();
 
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM person WHERE id = ?");
-            preparedStatement.setInt(1, i);
-            ResultSet resultSet = preparedStatement.executeQuery();
+        // Jdbc Template
+        // Custom mapper
+        // return jdbcTemplate.query("SELECT * FROM person WHERE id = ?", new
+        // Object[]{i}, new PersonMapper())
+        // .stream().findAny().orElse(null);
 
-            while (resultSet.next()) {
-                person.setId(resultSet.getInt("id"));
-                person.setName(resultSet.getString("name"));
-                person.setSurname(resultSet.getString("surname"));
-                person.setAge(resultSet.getInt("age"));
-                person.setEmail(resultSet.getString("email"));
+        // Built-in mapper
+        return jdbcTemplate
+                .query("SELECT * FROM person WHERE id = ?", new Object[] { i },
+                        new BeanPropertyRowMapper<>(Person.class))
+                .stream().findAny().orElse(null);
 
-            }
+        // OLD Jdbc
+        // Person person = new Person();
 
-            return person;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        // try {
+        // PreparedStatement preparedStatement = connection.prepareStatement("SELECT *
+        // FROM person WHERE id = ?");
+        // preparedStatement.setInt(1, i);
+        // ResultSet resultSet = preparedStatement.executeQuery();
+
+        // while (resultSet.next()) {
+        // person.setId(resultSet.getInt("id"));
+        // person.setName(resultSet.getString("name"));
+        // person.setSurname(resultSet.getString("surname"));
+        // person.setAge(resultSet.getInt("age"));
+        // person.setEmail(resultSet.getString("email"));
+
+        // }
+
+        // return person;
+        // } catch (SQLException e) {
+        // e.printStackTrace();
+        // }
 
         // People list
         // for (Person p : people) {
@@ -108,24 +120,29 @@ public class PersonDAO {
         // }
         // return null;
 
-        return null;
+        // return null;
     }
 
     public void add(Person person) {
 
-        try {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("INSERT INTO person VALUES(1, ?, ?, ?, ?)");
+        // Jdbc template
+        jdbcTemplate.update("INSERT INTO person VALUES(1, ?, ?, ?, ?)", person.getName(), person.getSurname(),
+                person.getAge(), person.getEmail());
 
-            preparedStatement.setString(1, person.getName());
-            preparedStatement.setString(2, person.getSurname());
-            preparedStatement.setInt(3, person.getAge());
-            preparedStatement.setString(4, person.getEmail());
+        // OLD Jdbc
+        // try {
+        // PreparedStatement preparedStatement = connection
+        // .prepareStatement("INSERT INTO person VALUES(1, ?, ?, ?, ?)");
 
-            preparedStatement.executeUpdate();
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
+        // preparedStatement.setString(1, person.getName());
+        // preparedStatement.setString(2, person.getSurname());
+        // preparedStatement.setInt(3, person.getAge());
+        // preparedStatement.setString(4, person.getEmail());
+
+        // preparedStatement.executeUpdate();
+        // } catch (SQLException e1) {
+        // e1.printStackTrace();
+        // }
 
         // Bad method
         // try {
@@ -145,22 +162,29 @@ public class PersonDAO {
     }
 
     public void update(int id, Person person) {
-        try {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("UPDATE person SET name = ?, surname = ?, age = ?, email = ? WHERE id = ?");
 
-            preparedStatement.setString(1, person.getName());
-            preparedStatement.setString(2, person.getSurname());
-            preparedStatement.setInt(3, person.getAge());
-            preparedStatement.setString(4, person.getEmail());
+        // Jdbc template
+        jdbcTemplate.update("UPDATE person SET name = ?, surname = ?, age = ?, email = ? WHERE id = ?",
+                person.getName(), person.getSurname(), person.getAge(), person.getEmail(), id);
 
-            preparedStatement.setInt(5, id);
+        // Old Jdbc
+        // try {
+        // PreparedStatement preparedStatement = connection
+        // .prepareStatement("UPDATE person SET name = ?, surname = ?, age = ?, email =
+        // ? WHERE id = ?");
 
-            preparedStatement.executeUpdate();
+        // preparedStatement.setString(1, person.getName());
+        // preparedStatement.setString(2, person.getSurname());
+        // preparedStatement.setInt(3, person.getAge());
+        // preparedStatement.setString(4, person.getEmail());
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        // preparedStatement.setInt(5, id);
+
+        // preparedStatement.executeUpdate();
+
+        // } catch (SQLException e) {
+        // e.printStackTrace();
+        // }
 
         // Works with the List
         // Person oldPerson = this.show(id);
@@ -172,15 +196,21 @@ public class PersonDAO {
     }
 
     public void delete(int id) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM person WHERE id = ?");
 
-            preparedStatement.setInt(1, id);
+        // Jdbc template
+        jdbcTemplate.update("DELETE FROM person WHERE id = ?", new Object[] { id });
 
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        // OLD Jdbc
+        // try {
+        // PreparedStatement preparedStatement = connection.prepareStatement("DELETE
+        // FROM person WHERE id = ?");
+
+        // preparedStatement.setInt(1, id);
+
+        // preparedStatement.executeUpdate();
+        // } catch (SQLException e) {
+        // e.printStackTrace();
+        // }
 
         // People list
         // this.people.remove(this.show(id));
