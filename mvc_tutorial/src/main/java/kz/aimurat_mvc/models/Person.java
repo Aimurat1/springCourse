@@ -10,11 +10,11 @@ public class Person {
     private int id;
 
     @NotEmpty(message = "Required field")
-    @Size(min = 2, max = 10, message = "Wrong size")
+    @Size(min = 2, max = 30, message = "Wrong size")
     private String name;
 
     @NotEmpty(message = "Required field")
-    @Size(min = 2, max = 10, message = "Wrong size")
+    @Size(min = 2, max = 30, message = "Wrong size")
     private String surname;
 
     @NotEmpty(message = "Required field")

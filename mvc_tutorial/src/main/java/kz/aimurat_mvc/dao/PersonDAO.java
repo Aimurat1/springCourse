@@ -128,7 +128,7 @@ public class PersonDAO {
     public void add(Person person) {
 
         // Jdbc template
-        jdbcTemplate.update("INSERT INTO person VALUES(1, ?, ?, ?, ?)",
+        jdbcTemplate.update("INSERT INTO person(name, surname, age, email) VALUES(?, ?, ?, ?)",
                 person.getName(), person.getSurname(),
                 person.getAge(), person.getEmail());
 
@@ -233,8 +233,8 @@ public class PersonDAO {
 
         long before = System.currentTimeMillis();
         for (Person person : list) {
-            jdbcTemplate.update("INSERT INTO person VALUES(?, ?, ?, ?, ?)",
-                    person.getId(), person.getName(), person.getSurname(),
+            jdbcTemplate.update("INSERT INTO person(name, surname, age, email) VALUES(?, ?, ?, ?)",
+                    person.getName(), person.getSurname(),
                     person.getAge(), person.getEmail());
         }
         long after = System.currentTimeMillis();
@@ -247,16 +247,15 @@ public class PersonDAO {
         final List<Person> list = create1000Person();
 
         long before = System.currentTimeMillis();
-        jdbcTemplate.batchUpdate("INSERT INTO person VALUES(?, ?, ?, ?, ?)",
+        jdbcTemplate.batchUpdate("INSERT INTO person(name, surname, age, email) VALUES(?, ?, ?, ?)",
                 new BatchPreparedStatementSetter() {
 
                     @Override
                     public void setValues(PreparedStatement ps, int i) throws SQLException {
-                        ps.setInt(1, list.get(i).getId());
-                        ps.setString(2, list.get(i).getName());
-                        ps.setString(3, list.get(i).getSurname());
-                        ps.setInt(4, list.get(i).getAge());
-                        ps.setString(5, list.get(i).getEmail());
+                        ps.setString(1, list.get(i).getName());
+                        ps.setString(2, list.get(i).getSurname());
+                        ps.setInt(3, list.get(i).getAge());
+                        ps.setString(4, list.get(i).getEmail());
 
                     }
 

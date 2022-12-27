@@ -72,7 +72,7 @@ public class PeopleController {
             return "personProject/people/new";
         }
         this.personDAO.add(person);
-        return "redirect:/people/" + person.getId();
+        return "redirect:/people/";
     }
 
     @GetMapping("/{id}/edit")
