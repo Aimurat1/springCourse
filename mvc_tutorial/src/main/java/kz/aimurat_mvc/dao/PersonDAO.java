@@ -77,6 +77,13 @@ public class PersonDAO {
 
     }
 
+    public Person show(String email) {
+        return jdbcTemplate
+                .query("SELECT * FROM person WHERE email = ?", new Object[] { email },
+                        new BeanPropertyRowMapper<>(Person.class))
+                .stream().findAny().orElse(null);
+    }
+
     public Person show(int i) {
 
         // Jdbc Template
