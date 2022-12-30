@@ -2,6 +2,7 @@ package kz.aimurat_mvc.models;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.*;
@@ -24,15 +25,27 @@ public class Person {
     @Min(value = 0, message = "Wrong age")
     private int age;
 
+    @Pattern(regexp = "[A-Z][a-z]*,[\\s]+[A-Z][a-z]*", message = "Address is not in correct format: 'Country, City'")
+    private String address;
+
     public Person() {
     }
 
-    public Person(int id, String name, String surname, String email, int age) {
+    public Person(int id, String name, String surname, String email, int age, String address) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.age = age;
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public int getId() {

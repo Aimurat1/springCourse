@@ -135,9 +135,10 @@ public class PersonDAO {
     public void add(Person person) {
 
         // Jdbc template
-        jdbcTemplate.update("INSERT INTO person(name, surname, age, email) VALUES(?, ?, ?, ?)",
+        jdbcTemplate.update("INSERT INTO person(name, surname, age, email, address) VALUES(?, ?, ?, ?, ?)",
                 person.getName(), person.getSurname(),
-                person.getAge(), person.getEmail());
+                person.getAge(), person.getEmail(),
+                person.getAddress());
 
         // OLD Jdbc
         // try {
@@ -174,8 +175,8 @@ public class PersonDAO {
     public void update(int id, Person person) {
 
         // Jdbc template
-        jdbcTemplate.update("UPDATE person SET name = ?, surname = ?, age = ?, email = ? WHERE id = ?",
-                person.getName(), person.getSurname(), person.getAge(), person.getEmail(), id);
+        jdbcTemplate.update("UPDATE person SET name = ?, surname = ?, age = ?, email = ?, address = ? WHERE id = ?",
+                person.getName(), person.getSurname(), person.getAge(), person.getEmail(), person.getAddress(), id);
 
         // Old Jdbc
         // try {
@@ -281,7 +282,7 @@ public class PersonDAO {
         List<Person> list = new ArrayList<>();
 
         for (int i = 0; i < 1000; i++) {
-            list.add(new Person(i, "Name" + i, "Surname" + i, "test" + i + "@gmail.com", 20));
+            list.add(new Person(i, "Name" + i, "Surname" + i, "test" + i + "@gmail.com", 20, "Some address"));
         }
 
         return list;
