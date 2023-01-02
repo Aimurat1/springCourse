@@ -93,10 +93,10 @@ public class PeopleController {
             BindingResult bindingResult) {
 
         // Validator - To check unique emails
-        personValidator.validate(person, bindingResult);
+        // personValidator.validate(person, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "personProject/people/" + id + "/edit";
+            return "personProject/people/edit";
         }
         this.personDAO.update(id, person);
         return "redirect:/people/" + id;
