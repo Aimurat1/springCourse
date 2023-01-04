@@ -49,6 +49,7 @@ public class App {
 
             // Get ID of Person
             System.out.println(person.getId());
+
         } finally {
             sessionFactory.close();
         }
