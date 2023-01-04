@@ -20,8 +20,18 @@ public class App {
         try {
             session.beginTransaction();
 
-            Person person = session.get(Person.class, 1);
-            System.out.println(person.getName() + ' ' + person.getAge());
+            // Select Person
+            // Person person = session.get(Person.class, 1);
+            // System.out.println(person.getName() + ' ' + person.getAge());
+
+            // Insert Person
+            Person person1 = new Person("Tom", 22);
+            Person person2 = new Person("Bob", 45);
+            Person person3 = new Person("Michael", 54);
+
+            session.save(person1);
+            session.save(person2);
+            session.save(person3);
 
             session.getTransaction().commit();
         } finally {
