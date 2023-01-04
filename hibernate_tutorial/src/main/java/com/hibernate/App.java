@@ -1,5 +1,7 @@
 package com.hibernate;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -11,6 +13,9 @@ import com.hibernate.model.Person;
  *
  */
 public class App {
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         Configuration configuration = new Configuration().addAnnotatedClass(Person.class);
 
@@ -42,13 +47,25 @@ public class App {
             // session.delete(person1);
 
             // Get ID of Person
-            Person person = new Person("Some name", 11);
-            session.save(person);
+            // Person person = new Person("Some name", 11);
+            // session.save(person);
+
+            // HQL query
+            // List<Person> people = session.createQuery("FROM Person WHERE age >
+            // 25").getResultList();
+            // for (Person p : people) {
+            // System.out.println(p);
+            // }
+
+            // session.createQuery("UPDATE Person set name = 'Test name' where age <
+            // 15").executeUpdate();
+
+            // session.createQuery("DELETE from Person WHERE age < 15").executeUpdate();
 
             session.getTransaction().commit();
 
             // Get ID of Person
-            System.out.println(person.getId());
+            // System.out.println(person.getId());
 
         } finally {
             sessionFactory.close();
