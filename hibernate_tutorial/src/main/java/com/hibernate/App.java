@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import com.hibernate.model.Item;
 import com.hibernate.model.Person;
 
 /**
@@ -17,7 +18,7 @@ public class App {
      * @param args
      */
     public static void main(String[] args) {
-        Configuration configuration = new Configuration().addAnnotatedClass(Person.class);
+        Configuration configuration = new Configuration().addAnnotatedClass(Person.class).addAnnotatedClass(Item.class);
 
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.getCurrentSession();
@@ -61,6 +62,36 @@ public class App {
             // 15").executeUpdate();
 
             // session.createQuery("DELETE from Person WHERE age < 15").executeUpdate();
+
+            /////////////////////
+            ///// One-to-many/////
+            /////////////////////
+
+            // // Get items of Person
+            // Person person = session.get(Person.class, 1);
+
+            // for (Item i : person.getItemList())
+            // System.out.println(i);
+
+            // // Get person of Item
+            // Item item = session.get(Item.class, 1);
+            // System.out.println(item.getOwner());
+
+            // // Insert items
+            // Person person = session.get(Person.class, 3);
+            // System.out.println(person);
+
+            // Item item = new Item("Xbox", person);
+            // person.getItemList().add(item);
+
+            // session.save(item);
+            // System.out.println(person.getItemList());
+
+            // // Delete items from Person
+            // Person person = session.get(Person.class, 1);
+
+            // for (Item i : person.getItemList())
+            // session.remove(i);
 
             session.getTransaction().commit();
 

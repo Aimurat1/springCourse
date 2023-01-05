@@ -1,38 +1,36 @@
 package com.hibernate.model;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Person")
-public class Person {
-    @Column(name = "id")
+@Table(name = "Item")
+public class Item {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "age")
-    private int age;
+    @ManyToOne
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    private Person owner;
 
-    @OneToMany(mappedBy = "owner")
-    private List<Item> itemList;
-
-    public Person() {
+    public Item(String name, Person owner) {
+        this.name = name;
+        this.owner = owner;
     }
 
-    public Person(String name, int age) {
-        this.name = name;
-        this.age = age;
+    public Item() {
+
     }
 
     public int getId() {
@@ -51,23 +49,20 @@ public class Person {
         this.name = name;
     }
 
-    public int getAge() {
-        return this.age;
+    public Person getOwner() {
+        return this.owner;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setOwner(Person owner) {
+        this.owner = owner;
     }
 
-    public List<Item> getItemList() {
-        return this.itemList;
-    }
-
-    public void setItemList(List<Item> itemList) {
-        this.itemList = itemList;
-    }
-
+    @Override
     public String toString() {
-        return this.name + ' ' + this.age;
+        return "{" +
+                " id='" + getId() + "'" +
+                ", name='" + getName() + "'" +
+                "}";
     }
+
 }
