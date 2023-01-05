@@ -1,5 +1,6 @@
 package com.hibernate;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -92,6 +93,16 @@ public class App {
 
             // for (Item i : person.getItemList())
             // session.remove(i);
+
+            ////////////////////////
+            ///// Каскадирование/////
+            ////////////////////////
+
+            Person person = new Person("Cascade name", 23);
+            Item item = new Item("Cascade Item", person);
+            person.setItemList(Arrays.asList(item));
+
+            session.persist(person);
 
             session.getTransaction().commit();
 
