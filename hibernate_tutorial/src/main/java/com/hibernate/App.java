@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import com.hibernate.model.Item;
+import com.hibernate.model.Passport;
 import com.hibernate.model.Person;
 
 /**
@@ -19,7 +20,8 @@ public class App {
      * @param args
      */
     public static void main(String[] args) {
-        Configuration configuration = new Configuration().addAnnotatedClass(Person.class).addAnnotatedClass(Item.class);
+        Configuration configuration = new Configuration().addAnnotatedClass(Person.class)
+                .addAnnotatedClass(Item.class).addAnnotatedClass(Passport.class);
 
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.getCurrentSession();
@@ -94,15 +96,28 @@ public class App {
             // for (Item i : person.getItemList())
             // session.remove(i);
 
-            ////////////////////////
+            /////////////////////////
             ///// Каскадирование/////
-            ////////////////////////
+            /////////////////////////
 
-            Person person = new Person("Cascade name", 23);
-            Item item = new Item("Cascade Item", person);
-            person.setItemList(Arrays.asList(item));
+            // Person person = new Person("Cascade name2", 34);
+            // Item item = new Item("Cascade Item2");
+            // Item item1 = new Item("Cascade Item3");
+            // Item item2 = new Item("Cascade Item4");
 
-            session.persist(person);
+            // person.addItem(Arrays.asList(item, item1, item2));
+
+            // session.save(person);
+
+            /////////////////////////
+            /////// One-to-one //////
+            /////////////////////////
+
+            Person person = new Person("oneToOnePerson", 43);
+            Passport passport = new Passport(person, 222222);
+            person.setPassport(passport);
+
+            session.save(person);
 
             session.getTransaction().commit();
 
