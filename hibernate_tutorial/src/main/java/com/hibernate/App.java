@@ -114,7 +114,7 @@ public class App {
             /////////////////////////
 
             Person person = new Person("oneToOnePerson", 43);
-            Passport passport = new Passport(person, 222222);
+            Passport passport = new Passport(3333333, person);
             person.setPassport(passport);
 
             session.save(person);
